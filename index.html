@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Kayan Miya — Daily Sales</title>
+  <meta name="theme-color" content="#0b6fb8">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="appbar">
+      <h1>Kayan Miya — Daily Sales</h1>
+      <div class="appbar-right">
+        <input type="date" id="datePicker" />
+        <button id="installBtn" class="btn ghost small" title="Install App" style="display:none">Install</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Items / Sales for selected date -->
+      <section class="card">
+        <h2 class="section-title">Items (for <span id="activeDateLabel"></span>)</h2>
+        <div class="controls">
+          <input id="newName" type="text" placeholder="Item name (e.g., Attaruhu)">
+          <input id="newPurchaseCost" type="number" placeholder="Total purchase cost ₦" min="0" step="1">
+          <input id="newPortionPrice" type="number" placeholder="Portion price ₦" min="0" step="1">
+          <button id="addItem" class="btn">Add Item</button>
+          <div class="right-actions">
+            <button id="exportCsv" class="btn small">Export CSV</button>
+            <button id="resetToday" class="btn ghost small">Reset Today</button>
+          </div>
+        </div>
+        <table id="itemsTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Cost (₦)</th>
+              <th>Portion ₦</th>
+              <th>Sold</th>
+              <th class="right">Sales (₦)</th>
+              <th class="right">Profit (₦)</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="totals">
+          <div class="tot-card">Total Sold: <strong id="totQty">0</strong></div>
+          <div class="tot-card">Total Sales: <strong id="totSales">₦0</strong></div>
+          <div class="tot-card">Total Profit: <strong id="totProfit">₦0</strong></div>
+        </div>
+      </section>
+
+      <!-- Debtors -->
+      <section class="card">
+        <h2 class="section-title">Debtors</h2>
+        <div class="controls">
+          <input id="debtorName" type="text" placeholder="Customer name">
+          <input id="debtorAmount" type="number" placeholder="Amount ₦" min="0" step="1">
+          <input id="debtorDue" type="date" placeholder="Due date">
+          <input id="debtorNote" type="text" placeholder="Note (optional)">
+          <button id="addDebtor" class="btn">Add Debtor</button>
+          <div class="right-actions">
+            <button id="notifyDue" class="btn ghost small">Notify Overdue</button>
+            <button id="exportDebts" class="btn small">Export Debts CSV</button>
+          </div>
+        </div>
+        <table id="debtsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount (₦)</th>
+              <th>Created</th>
+              <th>Due</th>
+              <th>Note</th>
+              <th>Status</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Backup / Restore -->
+      <section class="card">
+        <h2 class="section-title">Backup & Restore</h2>
+        <div class="controls">
+          <button id="backupBtn" class="btn">Download Backup (.json)</button>
+          <label class="fileLabel">
+            <input id="restoreFile" type="file" accept="application/json">
+            Restore from .json
+          </label>
+        </div>
+        <p class="muted">Data is saved locally and works offline. Use backup to keep a copy or move to another device.</p>
+      </section>
+    </main>
+
+    <footer class="muted">Saved locally (localStorage). PWA offline enabled.</footer>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
