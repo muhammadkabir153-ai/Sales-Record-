@@ -1,105 +1,128 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Kayan Miya — Daily Sales</title>
-  <meta name="theme-color" content="#0b6fb8">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>My App (PWA)</title>
+
+  <!-- Manifest for PWA installation -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23007ACC'/%3E%3Ctext x='50' y='58' font-size='48' text-anchor='middle' fill='white' font-family='Arial'%3EA%3C/text%3E%3C/svg%3E">
+
+  <meta name="theme-color" content="#007ACC">
+
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+    body{margin:0;padding:1rem;display:flex;flex-direction:column;gap:1rem;max-width:760px;margin-left:auto;margin-right:auto}
+    header{display:flex;align-items:center;gap:.75rem}
+    .card{padding:1rem;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+    button{padding:.6rem 1rem;border-radius:8px;border:0;background:#007ACC;color:white;font-weight:600}
+    small{color:#555}
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="appbar">
-      <h1>Kayan Miya — Daily Sales</h1>
-      <div class="appbar-right">
-        <input type="date" id="datePicker" />
-        <button id="installBtn" class="btn ghost small" title="Install App" style="display:none">Install</button>
+  <header>
+    <div style="width:56px;height:56px;border-radius:12px;background:#007ACC;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">A</div>
+    <div>
+      <h1 style="margin:0;font-size:1.1rem">My App (PWA)</h1>
+      <small>Installable, offline-capable, and handles notifications correctly</small>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2 style="margin-top:0">Permissions & Notifications</h2>
+      <p>Press the button to request notification permission and test a local notification.</p>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <button id="requestPerm">Request Notification Permission</button>
+        <button id="testNotify">Show Test Notification</button>
       </div>
-    </header>
+      <p id="permStatus" style="margin:0.4rem 0 0 0;"></p>
+    </section>
 
-    <main class="grid">
-      <!-- Items / Sales for selected date -->
-      <section class="card">
-        <h2 class="section-title">Items (for <span id="activeDateLabel"></span>)</h2>
-        <div class="controls">
-          <input id="newName" type="text" placeholder="Item name (e.g., Attaruhu)">
-          <input id="newPurchaseCost" type="number" placeholder="Total purchase cost ₦" min="0" step="1">
-          <input id="newPortionPrice" type="number" placeholder="Portion price ₦" min="0" step="1">
-          <button id="addItem" class="btn">Add Item</button>
-          <div class="right-actions">
-            <button id="exportCsv" class="btn small">Export CSV</button>
-            <button id="resetToday" class="btn ghost small">Reset Today</button>
-          </div>
-        </div>
-        <table id="itemsTable">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Cost (₦)</th>
-              <th>Portion ₦</th>
-              <th>Sold</th>
-              <th class="right">Sales (₦)</th>
-              <th class="right">Profit (₦)</th>
-              <th class="right">Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div class="totals">
-          <div class="tot-card">Total Sold: <strong id="totQty">0</strong></div>
-          <div class="tot-card">Total Sales: <strong id="totSales">₦0</strong></div>
-          <div class="tot-card">Total Profit: <strong id="totProfit">₦0</strong></div>
-        </div>
-      </section>
+    <section class="card">
+      <h2 style="margin-top:0">PWA / Install</h2>
+      <p>When served over HTTPS (or localhost) your browser should show an install prompt.</p>
+      <button id="showInstall" style="margin-top:.5rem">Show 'beforeinstallprompt' (if available)</button>
+      <p id="installHint"></p>
+    </section>
+  </main>
 
-      <!-- Debtors -->
-      <section class="card">
-        <h2 class="section-title">Debtors</h2>
-        <div class="controls">
-          <input id="debtorName" type="text" placeholder="Customer name">
-          <input id="debtorAmount" type="number" placeholder="Amount ₦" min="0" step="1">
-          <input id="debtorDue" type="date" placeholder="Due date">
-          <input id="debtorNote" type="text" placeholder="Note (optional)">
-          <button id="addDebtor" class="btn">Add Debtor</button>
-          <div class="right-actions">
-            <button id="notifyDue" class="btn ghost small">Notify Overdue</button>
-            <button id="exportDebts" class="btn small">Export Debts CSV</button>
-          </div>
-        </div>
-        <table id="debtsTable">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Amount (₦)</th>
-              <th>Created</th>
-              <th>Due</th>
-              <th>Note</th>
-              <th>Status</th>
-              <th class="right">Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </section>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('SW registered', reg.scope);
+      }).catch(err => console.warn('SW reg failed', err));
+    }
 
-      <!-- Backup / Restore -->
-      <section class="card">
-        <h2 class="section-title">Backup & Restore</h2>
-        <div class="controls">
-          <button id="backupBtn" class="btn">Download Backup (.json)</button>
-          <label class="fileLabel">
-            <input id="restoreFile" type="file" accept="application/json">
-            Restore from .json
-          </label>
-        </div>
-        <p class="muted">Data is saved locally and works offline. Use backup to keep a copy or move to another device.</p>
-      </section>
-    </main>
+    const permBtn = document.getElementById('requestPerm');
+    const testBtn = document.getElementById('testNotify');
+    const permStatus = document.getElementById('permStatus');
 
-    <footer class="muted">Saved locally (localStorage). PWA offline enabled.</footer>
-  </div>
+    function updatePermText(){
+      const p = Notification.permission;
+      permStatus.textContent = `Notification permission: ${p}`;
+      if(p === 'denied') permStatus.textContent += ' — enable in browser site settings.';
+    }
+    updatePermText();
 
-  <script src="app.js" defer></script>
+    permBtn.addEventListener('click', async () => {
+      try{
+        const res = await Notification.requestPermission();
+        updatePermText();
+        if(res === 'granted') showTestNotification('Permission granted', 'Notifications are enabled.');
+      }catch(e){ console.error(e); }
+    });
+
+    async function showTestNotification(title, body){
+      if(!('Notification' in window)){
+        alert('Notifications API not supported');
+        return;
+      }
+      if(Notification.permission !== 'granted'){
+        alert('Enable notifications first.');
+        return;
+      }
+      try{
+        const reg = await navigator.serviceWorker.getRegistration();
+        if(reg && reg.showNotification){
+          reg.showNotification(title, {
+            body,
+            icon: '/icons-192.png',
+            badge: '/icons-72.png',
+            tag: 'test-notification',
+            renotify: true
+          });
+        } else {
+          new Notification(title, {body, icon: '/icons-192.png'});
+        }
+      }catch(e){ console.warn('Failed to show notification', e); }
+    }
+
+    testBtn.addEventListener('click', () => showTestNotification('Test', 'This is a test notification'));
+
+    let deferredPrompt;
+    const showInstall = document.getElementById('showInstall');
+    const installHint = document.getElementById('installHint');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installHint.textContent = 'App can be installed — press the button above.';
+    });
+
+    showInstall.addEventListener('click', async () => {
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        installHint.textContent = `Install choice: ${choice.outcome}`;
+        deferredPrompt = null;
+      } else {
+        installHint.textContent = 'No install prompt currently available.';
+      }
+    });
+  </script>
 </body>
 </html>
