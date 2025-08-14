@@ -1,0 +1,33 @@
+:root{
+  --bg:#f4f7fb; --card:#ffffff; --muted:#6b7280; --accent:#0b6fb8; --danger:#dc2626; --ok:#16a34a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;background:var(--bg);color:#0f172a}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.appbar{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.appbar h1{font-size:20px;margin:0}
+.appbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:980px){ .grid{grid-template-columns:1fr 1fr; } .grid>section:nth-child(1){grid-column:1 / -1;} }
+.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(20,20,20,.04)}
+.section-title{margin:4px 2px 10px 2px;font-size:18px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.controls input[type="text"], .controls input[type="number"], .controls input[type="date"]{padding:10px;border:1px solid #e5e7eb;border-radius:10px}
+.right-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+table{width:100%;border-collapse:collapse;margin-top:6px}
+th,td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left}
+th{font-size:13px;color:var(--muted);background:#fbfdff}
+td.right{text-align:right}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:9px 12px;cursor:pointer}
+.btn.small{padding:6px 8px;font-size:13px}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.fileLabel{border:1px dashed #9ca3af;border-radius:10px;padding:8px 12px;cursor:pointer}
+.totals{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.tot-card{background:#f0f7ff;border:1px solid #dbeafe;border-radius:10px;padding:10px 12px;font-weight:600}
+.badge{padding:4px 8px;border-radius:999px;font-size:12px}
+.badge.ok{background:#ecfdf5;color:var(--ok);border:1px solid #86efac}
+.badge.overdue{background:#fef2f2;color:var(--danger);border:1px solid #fecaca}
+.badge.pending{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.muted{color:var(--muted);font-size:13px}
+.price-edit{width:110px;padding:8px;border-radius:8px;border:1px solid #e2e8f0}
+.actions .small{margin-left:4px}
